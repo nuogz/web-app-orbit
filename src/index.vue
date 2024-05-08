@@ -71,7 +71,9 @@
 
 <style lang="sass" scoped>
 comp-sidebar
-	@apply fixed z-50 shadow-mdd p-1 bg-[var(--cMain)] overflow-x-hidden overflow-y-scroll
+	@apply fixed z-50 shadow-mdd px-2 overflow-x-hidden overflow-y-auto
+	background-color: oklch(from var(--cBack) calc(l * 1.2) c h)
+	background-color: var(--cBackSideBar)
 	width: var(--widthSidebar)
 	height: calc(100% - var(--heightTopbar))
 	top: var(--heightTopbar)
@@ -80,16 +82,15 @@ comp-sidebar
 		@apply absolute opacity-25 z-10 text-xs top-1 left-1
 
 	p-tab
-		@apply relative block h-8 px-2 mb-2
+		@apply relative block h-8 px-2 mb-2 w-full
 		@apply rounded-sm cursor-pointer outline-none shadow-mdd select-none
 		@apply elli text-left text-base leading-8 text-[var(--TextBack)] bg-[var(--cBack)]
-		width: calc(var(--widthSidebar) - var(--spc) * 4)
 
 		&:first-of-type
 			@apply mt-2
 
 		&:focus
-			@apply ring-2 ring-[var(--cSidebarRingFocus)]
+			@apply ring-2 ring-[var(--cRingFocus)]
 
 		&[profile]
 			@apply font-bold mt-0
@@ -107,7 +108,7 @@ comp-sidebar
 			@apply w-48
 
 		&[now]
-			@apply ring-2 ring-[var(--cSidebarRingNow)]
+			@apply ring-2 ring-[var(--cRingNow)]
 
 		p-header
 			@apply relative block rounded-sm shadow-md absolute top-1 left-1

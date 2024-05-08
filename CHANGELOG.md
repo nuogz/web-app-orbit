@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v2.4.2 - 2024.05.08 10
+* (new) support new css var `cBackSideBar`
+* renew css var to latest
+* improve style about scroll
+* renew enviroment
+* bump up dependencies
+
+
 ## v2.4.1 - 2023.12.06 15
 * tweak enviroment
 * bump up dependencies

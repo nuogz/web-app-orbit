@@ -1,9 +1,21 @@
 {
 	"eslint.experimental.useFlatConfig": true,
 	"files.trimTrailingWhitespace": true,
-	"volar.format.initialIndent": {
-		"javascript": true,
-		"html": true
+	"javascript.preferences.importModuleSpecifierEnding": "js",
+	"html.format.enable": false,
+	"vue.inlayHints.missingProps": true,
+	"vue.format.script.initialIndent": true,
+	"cssvar.postcssSyntax": {
+		"postcss-sass": [
+			"sass"
+		]
 	},
-	"vue.inlayHints.missingProps": true
+	"cssvar.files": [
+		"**/*.css",
+		"**/*.sass"
+	],
+	"cssvar.ignore": [
+		"**/node_modules/**",
+		"./dist/**"
+	]
 }
