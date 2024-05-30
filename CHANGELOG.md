@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.5.0 - 2024.05.30 09
+* (new) support tab display in group
+* improve codes when the parent vue app doesn't provide `v-tip` directive and `v-menu` directive
+* add system color as fallback color in css
+
+
 ## v2.4.2 - 2024.05.08 10
 * (new) support new css var `cBackSideBar`
 * renew css var to latest

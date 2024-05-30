@@ -1,6 +1,5 @@
 import { reactive } from 'vue';
-
-import { randomString } from '@nuogz/utility';
+import { ulid } from 'ulidx';
 
 
 
@@ -9,9 +8,10 @@ import { randomString } from '@nuogz/utility';
  * @property {string} type type of how to show tab info in tab list
  * @property {string} typeList type of tab in tab list
  * @property {Object | Array<string> | string | import('@fortawesome/fontawesome-svg-core').IconDefinition} [icon] fontawesome icon (if typeList)
- * @property {string} [title]
- * @property {string} [tipsTitle] tips displayed on mouse hover
  * @property {string} [header] the url of tab image
+ * @property {string} [title]
+ * @property {string} [group] group name
+ * @property {string} [tipsTitle] tips displayed on mouse hover
  * @property {boolean} [only]
  * @property {boolean} [hidden]
  * @property {boolean} [delay]
@@ -24,6 +24,8 @@ export class Tab {
 	id;
 	/** @type {string} */
 	module;
+	/** @type {TabAdmin} */
+	admin;
 
 	/** @type {string} */
 	typeTab;
@@ -41,6 +43,8 @@ export class Tab {
 	title;
 	/** @type {string} */
 	header;
+	/** @type {string} */
+	group;
 
 	/** @type {string} */
 	tipsTitle;
@@ -63,15 +67,16 @@ export class Tab {
 	/**
 	 * @param {string} id
 	 * @param {string} module
-	 * @param {string} typeTab
-	 * @param {TabOption} option
-	 * @param {Object<string, any>} params
+	 * @param {TabAdmin} admin
+	 * @param {TabOption} [option={}]
+	 * @param {any[]} [params=[]]
 	 */
-	constructor(id, module, option = {}, params) {
-		const { type = 'icon|title', typeList, icon, title, header, tipsTitle } = option;
+	constructor(id, module, admin, option = {}, params = []) {
+		const { type = 'icon|title', typeList, icon, title, header, group, tipsTitle } = option;
 
 		this.id = id;
 		this.module = module;
+		this.admin = admin;
 
 		this.typeTab = type;
 		this.typeList = typeList ?? module;
@@ -81,6 +86,7 @@ export class Tab {
 		this.icon = icon;
 		this.title = title;
 		this.header = header;
+		this.group = group;
 		this.tipsTitle = tipsTitle;
 
 		this.info = {};
@@ -88,6 +94,16 @@ export class Tab {
 	}
 
 	get typesTab() { return this.typeTab?.split('|') ?? []; }
+
+
+	/**
+	 * @param {string} [reason]
+	 * @param {boolean} [withParams=false]
+	 * @param {...any} params
+	 */
+	async changeToSelf(reason, withParams = false, ...params) {
+		this.admin.change(this, reason, withParams, ...params);
+	}
 }
 
 const sUseHandleInit = Symbol('use-handle-init');
@@ -129,12 +145,12 @@ export default class TabAdmin {
 	 * @returns {Tab}
 	 */
 	add(module, option = {}, ...params) {
-		const idTab = randomString();
+		const idTab = ulid();
 
 
 		const tab =
 			(option.only ? Object.values(this.tabs$id).find(t => t.typeList == option.typeList) : undefined) ??
-			(this.tabs$id[idTab] = new Tab(idTab, module, option));
+			(this.tabs$id[idTab] = new Tab(idTab, module, this, option));
 
 
 		if(option.delay) {
@@ -150,7 +166,7 @@ export default class TabAdmin {
 
 	/** @param {Tab} tab */
 	del(tab) {
-		const now = this.now;
+		const tabNow = this.now;
 
 		const map = this.tabs$id;
 		const ids = Object.keys(map);
@@ -159,7 +175,7 @@ export default class TabAdmin {
 		delete this.tabs$id[tab.id];
 
 
-		if(now === tab) {
+		if(tabNow === tab) {
 			this.historiesTab.pop();
 			const tabLast = this.historiesTab.pop();
 
@@ -177,6 +193,31 @@ export default class TabAdmin {
 	}
 
 	/**
+	 * @param {string} module
+	 * @param {TabOption} option
+	 * @param {...any} params
+	 * @returns {Tab}
+	 */
+	changeOrAdd(module, option = {}, ...params) {
+		let tab = this.list.find(tab => tab.module == module && (
+			typeof option.handleFind == 'function'
+				? option.handleFind(tab, this, module, option, ...params)
+				: params.join('||') == tab.params.join('||')
+		));
+
+
+		if(tab) {
+			this.change(tab, option.reason, Boolean(params.length), ...params);
+		}
+		else {
+			tab = this.add(module, option, ...params);
+		}
+
+
+		return tab;
+	}
+
+	/**
 	 * @param {Tab} tab
 	 * @param {string} [reason]
 	 * @param {boolean} [withParams=false]
@@ -188,42 +229,50 @@ export default class TabAdmin {
 		this.idTabNow = tab.id;
 		this.modulePre = tab.module;
 
-		if(withParams) {
-			tab.params = tab.paramsDelay ?? params;
-			delete tab.paramsDelay;
-		}
-
 
 		if(this.historiesTab[this.historiesTab.length - 1] !== tab) { this.historiesTab.push(tab); }
 
 
-		this.emitChanged(reason);
+		this.emitChanged(reason, withParams, ...params);
 	}
 
-	/** @param {string} [reason] */
-	async emitChanged(reason) {
-		const handlesTab = this.handlesTab$typeList[this.now.typeList];
+	/**
+	 * @param {string} [reason]
+	 * @param {boolean} [withParams=false]
+	 * @param {...any} params
+	 */
+	async emitChanged(reason, withParams = false, ...params) {
+		const tabNow = this.now;
+
+		if('paramsDelay' in tabNow) {
+			tabNow.params = tabNow.paramsDelay;
+			delete tabNow.paramsDelay;
+		}
+		if(withParams) { tabNow.params = params; }
+
+
+		const handlesTab = this.handlesTab$typeList[tabNow.typeList];
 		if(!handlesTab) { return; }
 
 
 		for(const [refTab, handleInit, handleChange] of handlesTab) {
 			try {
-				refTab.value = this.now;
+				refTab.value = tabNow;
 
 
-				if(!this.now.inited && typeof handleInit == 'function') {
-					await handleInit(this.now, reason);
+				if(!tabNow.inited && typeof handleInit == 'function') {
+					await handleInit(tabNow, reason);
 
-					this.now.inited = true;
+					tabNow.inited = true;
 				}
 				else if(typeof handleChange == 'function') {
-					await handleChange(this.now, reason);
+					await handleChange(tabNow, reason);
 				}
 				else if(handleChange === TabAdmin.sUseHandleInit) {
-					await handleInit(this.now, reason);
+					await handleInit(tabNow, reason);
 				}
 			}
-			catch(error) { globalThis.console.error('Occur error when emitting change tab.', error) }
+			catch(error) { globalThis.console.error('Occur error when emitting change tab.', error); }
 		}
 	}
 

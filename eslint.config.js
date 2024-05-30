@@ -126,7 +126,7 @@ if(typesSource.includes('vue')) {
 
 			indent: [0],
 			'vue/htmlIndent': [2, 'tab'],
-			'vue/scriptIndent': [2, 'tab', { baseIndent: 1 }],
+			'vue/scriptIndent': [2, 'tab'],
 			'vue/maxAttributesPerLine': [0],
 			'vue/mustacheInterpolationSpacing': [0],
 			'vue/singlelineHtmlElementContentNewline': [0],

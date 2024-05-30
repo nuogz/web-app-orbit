@@ -1,10 +1,13 @@
 {
 	"eslint.experimental.useFlatConfig": true,
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
 	"files.trimTrailingWhitespace": true,
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"html.format.enable": false,
+	"sass.format.enabled": false,
 	"vue.inlayHints.missingProps": true,
-	"vue.format.script.initialIndent": true,
 	"cssvar.postcssSyntax": {
 		"postcss-sass": [
 			"sass"

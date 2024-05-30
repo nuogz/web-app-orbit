@@ -3,9 +3,10 @@ import { DefineComponent, PropType, Ref } from 'vue';
 
 import TabAdmin from './tab-admin.js';
 
-export const moduleNow: Ref<string>;
 export const tabAdmin: TabAdmin;
+export const moduleNow: Ref<string>;
 export const domSidebar: Ref<HTMLElement>;
+export const hidden$idGroup: Ref<Object<string, boolean>>;
 
 
 
