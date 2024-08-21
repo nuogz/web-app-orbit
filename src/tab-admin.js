@@ -183,7 +183,9 @@ export default class TabAdmin {
 				this.change(tabLast, 'remove-tab');
 			}
 			else {
-				this.change(map[ids[index + 1] ?? ids[index - 1]], 'remove-tab');
+				const tab = map[ids[index + 1] ?? ids[index - 1]];
+
+				if(tab) { this.change(tab, 'remove-tab'); }
 			}
 		}
 
@@ -199,22 +201,20 @@ export default class TabAdmin {
 	 * @returns {Tab}
 	 */
 	changeOrAdd(module, option = {}, ...params) {
-		let tab = this.list.find(tab => tab.module == module && (
+		const tab = this.list.find(tab => tab.module == module && (
 			typeof option.handleFind == 'function'
 				? option.handleFind(tab, this, module, option, ...params)
-				: params.join('||') == tab.params.join('||')
+				: params.join('||') == (tab.params.join('||') || tab.paramsDelay?.join('||'))
 		));
 
 
 		if(tab) {
 			this.change(tab, option.reason, Boolean(params.length), ...params);
-		}
-		else {
-			tab = this.add(module, option, ...params);
+
+			return tab;
 		}
 
-
-		return tab;
+		return this.add(module, option, ...params);
 	}
 
 	/**

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.5.1 - 2024.08.21 15
+* refactor: fixed the problem that deleting Tabs would report an error when the number of Tabs is 0
+* refactor: import the logic of `TabAdmin.changeOrAdd()`
+* deps: bump up dependencies
+
+
 ## v2.5.0 - 2024.05.30 09
 * (new) support tab display in group
 * improve codes when the parent vue app doesn't provide `v-tip` directive and `v-menu` directive
