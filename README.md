@@ -1,6 +1,9 @@
-> [!IMPORTANT]
-> 本文档尚未完成，后续将提供机器翻译的英文版。\
-> This document is not yet completed. A machine-translated English version will be provided later.
+> [!IMPORTANT]\
+> 本库功能仍有部分功能未完成文档尚未完成。\
+> This library has some features that are not finished yet.
+> 
+> 后续将提供机器翻译的英文版。\
+> A machine-translated English version will be provided later.
 
 # @nuogz/web-app-orbit 天轨
 ![Version](https://img.shields.io/github/package-json/v/nuogz/web-app-orbit?style=flat-square)
@@ -65,7 +68,7 @@ Bar component for framing main content in Nuogz Web App, based on [Vue 3](https:
 ### mode 边栏模式
 指定组件以哪种形式实现边栏功能。默认是`none`无边栏模式
 ````html
-  <AppOrbit mode="border">...</AppOrbit>
+<AppOrbit mode="border">...</AppOrbit>
 ````
 - `none` **无边栏模式**\
   直接插入<主内容>，没有额外元素
@@ -90,7 +93,7 @@ Bar component for framing main content in Nuogz Web App, based on [Vue 3](https:
 ### side 侧栏位置
 `side`侧栏可以让开发者无需关注侧栏的左右位置，方便交由由用户自行控制。默认是`left`侧栏在左
 ````html
-  <AppOrbit side="left">...</AppOrbit>
+<AppOrbit side="left">...</AppOrbit>
 ````
 - `left` 侧栏在左
 - `right` 侧栏在右
@@ -101,7 +104,7 @@ Bar component for framing main content in Nuogz Web App, based on [Vue 3](https:
 该属性会影响视口的四角由哪个边栏占用的。默认是`x`侧栏优先\
 支持数组、空格/逗号连接的字符串等多种定义形式
 ````html
-  <AppOrbit corner="x">...</AppOrbit>
+<AppOrbit corner="x">...</AppOrbit>
 ````
 - `y` 顶栏和Y轴优先
 - `x` 侧栏（左/右栏、X轴）优先
@@ -126,7 +129,7 @@ Bar component for framing main content in Nuogz Web App, based on [Vue 3](https:
 ### hide 隐藏侧栏
 支持数组、空格/逗号连接的字符串等多种定义形式
 ````html
-  <AppOrbit hide="top right">...</AppOrbit>
+<AppOrbit hide="top right">...</AppOrbit>
 ````
 ````javascript
 // 以下均为隐藏顶栏、右栏
