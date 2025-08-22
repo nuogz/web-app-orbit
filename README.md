@@ -1,7 +1,7 @@
 > [!IMPORTANT]\
 > 本库功能仍有部分功能未完成文档尚未完成。\
 > This library has some features that are not finished yet.
-> 
+>
 > 后续将提供机器翻译的英文版。\
 > A machine-translated English version will be provided later.
 
@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/github/license/nuogz/web-app-orbit?style=flat-square)
 
 Bar component for framing main content in Nuogz Web App, based on [Vue 3](https://vuejs.org/).\
-框住主内容的边栏组件，用于Nuogz Web App，基于Vue3、UnoCSS、Vue Router
+框住主内容的边栏组件。用于Nuogz Web App，基于Vue3、UnoCSS、Vue Router
 
 环绕应用，也就是常见的侧/顶/底栏。四侧内容围着主内容，形似环绕天体。因而得名天轨。\
 经过一系列的迭代，从原来的侧栏组件`vue-sidebar`升级重构为全新的`web-app-orbit`
